@@ -1,4 +1,4 @@
-export const FEED_SECONDS = 40;
+export const FEED_SECONDS = 60;
 export const FOOD_SPAWN_INTERVAL = 1.10;
 export const HAND_SWEEP_DURATION = 1.86;
 export const SNACK_SPAWN_CHANCE = 1 / 12; // one-third of the original 25%
