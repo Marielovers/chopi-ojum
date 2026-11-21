@@ -3,6 +3,7 @@ import {FEED_SECONDS,FOOD_SPAWN_INTERVAL,HAND_SWEEP_DURATION,SNACKS,FOOD_LABELS,
 import {Live2DStage} from './live2d.js';
 import {saveScore,fetchRanking} from './ranking.js';
 import {sfx,toggleMute} from './sfx.js';
+import {unlockGameAudio,setGameAudioPhase,soundSettingChanged,playGameVoice} from './audio.js';
 const $=id=>document.getElementById(id),scene=$('scene');
 const live=new Live2DStage(scene,$('live2d-canvas'),$('fallback-char'),$('live2d-status'));
 const screens={title:$('title-screen'),feed:$('feed-screen'),shoot:$('shoot-screen'),hidden:$('hidden-screen')};
@@ -25,7 +26,7 @@ let hiddenPointer=null,settles=new Map();
 let cachedWidth=0,cachedHeight=0,dpr=1;
 function viewport(){return {w:scene.clientWidth,h:scene.clientHeight};}
 function laneYs(){const {h}=viewport();return [h*.57,h*.64,h*.71,h*.78];}
-function mode(next){phase=next;scene.className='scene is-'+next;Object.entries(screens).forEach(([key,el])=>el.hidden=key!==next);live.show(next);$('sound-btn').hidden=next==='hidden';}
+function mode(next){phase=next;scene.className='scene is-'+next;Object.entries(screens).forEach(([key,el])=>el.hidden=key!==next);live.show(next);setGameAudioPhase(next);$('sound-btn').hidden=next==='hidden';}
 function toast(message){const node=$('toast');node.textContent=message;node.classList.add('show');clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>node.classList.remove('show'),2300);}
 function notice(message){const node=$('feed-notice');node.textContent=message;clearTimeout(noticeTimeout);noticeTimeout=setTimeout(()=>node.textContent='',1100);}
 function updateFeedHUD(){ $('urine-count').textContent=round.urine; $('alcohol-count').textContent=`${round.alcohol}/10`; $('combo-count').textContent=round.combo; $('feed-timer').textContent=Math.max(0,Math.ceil(feedRemain)); }
@@ -44,7 +45,7 @@ function startSweep(clientX){
  sfx('eat');
 }
 function pushFood(item){ if(item.pushing||fallTime>0)return; item.pushing=true;item.pushAge=0;item.fromX=item.x;item.fromY=item.y; item.el.classList.add('is-pushed'); }
-function eat(item){ const outcome=collect(round,item.type);round=outcome.round; updateFeedHUD(); live.set('ParamMouthOpenY',1,'model1');mouthTime=.52; if(outcome.alcohol){ live.set('ParamCheek',Math.min(1,round.alcohol*.1),'model1'); if(round.alcohol>=3)live.set('rmhighlight',1,'model1'); if(round.alcohol>=6)live.set('eyewhite',1,'model1'); notice(`🍷 술 ${round.alcohol}/10!`); }else if(outcome.bonus){sfx('bonus');notice(`🔥 연속 보너스 +${outcome.bonus}!`);} else if(SNACKS.includes(item.type)){sfx('snack');notice('🍪 간식 -30');} if(outcome.hidden){ fallTime=.001;$('feed-next').disabled=true; $('fall-caption').hidden=false;sfx('crash'); } }
+function eat(item){ const outcome=collect(round,item.type);round=outcome.round; updateFeedHUD(); playGameVoice('eat'); live.set('ParamMouthOpenY',1,'model1');mouthTime=.52; if(outcome.alcohol){ live.set('ParamCheek',Math.min(1,round.alcohol*.1),'model1'); if(round.alcohol>=3)live.set('rmhighlight',1,'model1'); if(round.alcohol>=6)live.set('eyewhite',1,'model1'); notice(`🍷 술 ${round.alcohol}/10!`); }else if(outcome.bonus){sfx('bonus');notice(`🔥 연속 보너스 +${outcome.bonus}!`);} else if(SNACKS.includes(item.type)){sfx('snack');notice('🍪 간식 -30');} if(outcome.hidden){ fallTime=.001;$('feed-next').disabled=true; $('fall-caption').hidden=false;sfx('crash'); } }
 function tickFeed(dt){
  if(fallTime>0){ fallTime+=dt; live.applyFall(clamp(fallTime/1.25,0,1)); if(fallTime>2.1)beginHidden(); return; }
  feedRemain=Math.max(0,feedRemain-dt); spawnElapsed+=dt; if(spawnElapsed>FOOD_SPAWN_INTERVAL&&foodItems.length<12){spawnElapsed=0;spawnFood();}
@@ -90,8 +91,8 @@ function tickFeed(dt){
 
 function beginShoot(){ if(phase!=='feed')return; foodItems.forEach(item=>item.el.remove());foodItems=[]; shoot={phase:'prepare',clock:0,angle:45,windup:0,elapsed:0,velocity:launchVelocity(round.urine),points:[],cameraPx:0,meters:0,particles:[]}; mode('shoot'); live.clearParams('model2');live.set('cloth',0,'model2');live.set('angle',0,'model2'); $('launch-power').textContent=round.urine; $('flight-distance').textContent='0.0';$('aim-button').disabled=true; $('aim-ui').hidden=false;$('shoot-result').hidden=true;$('flight-stamp').hidden=true; $('aim-title').textContent='발사 준비 중…';$('aim-instruction').textContent='바늘이 위아래로 움직일 때 정지시키세요.'; live.moveForCamera(0); }
 function lockAngle(){ if(phase!=='shoot'||shoot.phase!=='aim')return; shoot.phase='windup';shoot.windup=0;sfx('aim'); $('aim-button').disabled=true; $('aim-title').textContent=`${shoot.angle.toFixed(0)}° 고정!`; $('aim-instruction').textContent='쵸피가 자세를 잡는 중…'; }
-function launch(){ shoot.phase='flying';shoot.elapsed=0;shoot.points=[];shoot.cameraPx=0;shoot.particles=makeSprayParticles(shoot.angle,shoot.velocity,round.urine); $('aim-ui').hidden=true;$('flight-stamp').hidden=false; setTimeout(()=>$('flight-stamp').hidden=true,700); sfx('launch'); }
-function land(){ if(shoot.phase!=='settling')return; shoot.phase='done';sfx('land');shoot.meters=Math.round(shoot.meters*10)/10; $('result-meters').textContent=shoot.meters.toFixed(1)+'m'; $('result-comment').textContent=shoot.meters>110?'분수처럼 쏟아진 전설적인 발사!':shoot.meters>55?'시원하게 멀리 퍼져 나갔어요!':'다음엔 음료를 더 모아보세요!'; $('record-feedback').textContent='';$('record-btn').disabled=false;$('shoot-result').hidden=false; }
+function launch(){ shoot.phase='flying';shoot.elapsed=0;shoot.points=[];shoot.cameraPx=0;shoot.particles=makeSprayParticles(shoot.angle,shoot.velocity,round.urine); $('aim-ui').hidden=true;$('flight-stamp').hidden=false; setTimeout(()=>$('flight-stamp').hidden=true,700); sfx('launch');playGameVoice('shout'); }
+function land(){ if(shoot.phase!=='settling')return; shoot.phase='done';sfx('land');shoot.meters=Math.round(shoot.meters*10)/10;playGameVoice('result'); $('result-meters').textContent=shoot.meters.toFixed(1)+'m'; $('result-comment').textContent=shoot.meters>11?'분수처럼 쏟아진 전설적인 발사!':shoot.meters>5.5?'시원하게 멀리 퍼져 나갔어요!':'다음엔 음료를 더 모아보세요!'; $('record-feedback').textContent='';$('record-btn').disabled=false;$('shoot-result').hidden=false; }
 function tickShoot(dt){ shoot.clock+=dt; if(shoot.phase==='prepare'){ const t=clamp(shoot.clock/1.4,0,1);live.set('cloth',t,'model2'); if(t>=1){shoot.phase='aim';$('aim-title').textContent='각도를 맞춰보세요!';$('aim-button').disabled=false;} } if(shoot.phase==='aim')shoot.angle=angleValue(shoot.clock); if(shoot.phase==='windup'){ shoot.windup+=dt;live.set('angle',clamp(shoot.windup/1.25,0,1),'model2'); if(shoot.windup>=1.4)launch(); } $('angle-arm').style.transform=`translateX(-50%) rotate(${-shoot.angle}deg)`; $('angle-number').textContent=shoot.angle.toFixed(1)+'°'; if(shoot.phase==='flying'){
   shoot.elapsed+=dt;
   const pos=flightPosition(shoot.elapsed,shoot.velocity,shoot.angle);
@@ -170,6 +171,7 @@ function getAreaFromPoint(e){
 function startDrag(e,name){
  const rule=rules[name];if(!rule||phase!=='hidden')return;
  if(rule.requires&&live.get(rule.requires,'model1')<1.98)return;
+ playGameVoice('hmm');
  e.preventDefault();settles.delete(rule.keys[0]);
  hiddenPointer={id:e.pointerId,name,startX:e.clientX,startY:e.clientY,lastX:e.clientX,lastY:e.clientY,
    initial:Object.fromEntries(rule.keys.map(k=>[k,live.get(k,'model1')]))};
@@ -232,7 +234,7 @@ function initButtons(){
  $('rank-close').addEventListener('click',()=>$('ranking-overlay').hidden=true);
  $('rank-retry').addEventListener('click',showRank);
  $('ranking-overlay').addEventListener('click',e=>{if(e.target===$('ranking-overlay'))$('ranking-overlay').hidden=true;});
- $('sound-btn').addEventListener('click',()=>{$('sound-btn').textContent=toggleMute()?'♪̸':'♪';});
+ $('sound-btn').addEventListener('click',()=>{$('sound-btn').textContent=toggleMute()?'♪̸':'♪';soundSettingChanged();});
  $('hidden-screen').addEventListener('pointerdown',e=>{
    if(phase!=='hidden'||portraitBlocked()||e.target.closest('button'))return;
    const area=getAreaFromPoint(e);
@@ -267,3 +269,6 @@ portraitMedia.addEventListener('change',()=>{
  }
 });
 initButtons();mode('title');requestAnimationFrame(frame);live.init();
+// A first touch/click/key unlocks HTMLAudio for BGM and character voices.
+document.addEventListener('pointerdown',unlockGameAudio,{once:true,capture:true});
+document.addEventListener('keydown',unlockGameAudio,{once:true,capture:true});

@@ -77,7 +77,12 @@ export function makeSprayParticles(angle,velocity,power,random=Math.random){
 }
 
 export function angleValue(seconds){return 8+62*(Math.sin(seconds*2.9)+1)/2;}
-export function launchVelocity(urine){return 9+Math.sqrt(Math.max(0,urine))*5.6;}
+// Trajectory range is proportional to velocity squared for a given launch angle.
+// Multiplying velocity by sqrt(0.1) makes the ACTUAL horizontal distance 1/10.
+export const FLIGHT_DISTANCE_SCALE = 0.1;
+export function launchVelocity(urine){
+ return (9+Math.sqrt(Math.max(0,urine))*5.6)*Math.sqrt(FLIGHT_DISTANCE_SCALE);
+}
 export function flightPosition(t,v,angleDeg,gravity=9.8){
   const a=angleDeg*Math.PI/180;
   return {x:v*Math.cos(a)*t,y:v*Math.sin(a)*t-gravity*t*t*.5};

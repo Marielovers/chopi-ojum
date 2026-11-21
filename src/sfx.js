@@ -1,5 +1,6 @@
 let ctx=null,muted=false;
 export function toggleMute(){muted=!muted;return muted;}
+export function isMuted(){return muted;}
 function audio(){if(muted)return null;try{ctx ||= new (window.AudioContext||window.webkitAudioContext)();if(ctx.state==='suspended')ctx.resume();return ctx;}catch{return null;}}
 function tone(frequency=440,duration=.12,type='sine',volume=.065,delay=0){
   const c=audio();if(!c)return;let t=c.currentTime+delay;
