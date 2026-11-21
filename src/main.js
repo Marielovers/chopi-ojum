@@ -96,7 +96,7 @@ function land(){ if(shoot.phase!=='settling')return; shoot.phase='done';sfx('lan
 function tickShoot(dt){ shoot.clock+=dt; if(shoot.phase==='prepare'){ const t=clamp(shoot.clock/1.4,0,1);live.set('cloth',t,'model2'); if(t>=1){shoot.phase='aim';$('aim-title').textContent='각도를 맞춰보세요!';$('aim-button').disabled=false;} } if(shoot.phase==='aim')shoot.angle=angleValue(shoot.clock); if(shoot.phase==='windup'){ shoot.windup+=dt;live.set('angle',clamp(shoot.windup/1.25,0,1),'model2'); if(shoot.windup>=1.4)launch(); } $('angle-arm').style.transform=`translateX(-50%) rotate(${-shoot.angle}deg)`; $('angle-number').textContent=shoot.angle.toFixed(1)+'°'; if(shoot.phase==='flying'){
   shoot.elapsed+=dt;
   const pos=flightPosition(shoot.elapsed,shoot.velocity,shoot.angle);
-  shoot.meters=pos.x;
+  shoot.meters=pos.x/10;
   const {w}=viewport(),ppm=Math.max(11,w/55);
   shoot.cameraPx=Math.max(0,pos.x*ppm-w*.57);
   $('flight-distance').textContent=shoot.meters.toFixed(1);
