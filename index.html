@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#281b35" />
+  <title>쵸피의 오줌 멀리 쏘기 대회</title>
+</head>
+<body>
+  <main id="scene" class="scene is-title" aria-label="쵸피의 오줌 멀리 쏘기 대회">
+    <section id="title-screen" class="screen">
+      <div class="title-vignette"></div>
+      <div class="title-card">
+        <div class="crest">✦ CHOPY CUP ✦</div>
+        <h1>쵸피의<br><em>오줌 멀리 쏘기</em><br>대회!</h1>
+        <p>마시고 · 모으고 · 조준하고 · 기록하자!</p>
+        <button id="start-btn" class="button button-primary">대회 참가하기 <span>▶</span></button>
+        <button id="title-rank-btn" class="button button-ghost">🏆 기록 살펴보기</button>
+      </div>
+      <div class="title-footer">PC는 마우스 · 모바일은 터치로 플레이</div>
+    </section>
+
+    <section id="feed-screen" class="screen" hidden>
+      <img class="full-bg" src="%BASE_URL%assets/tavern.webp" alt="" />
+      <div class="lights" aria-hidden="true"></div>
+      <img class="table-foreground" src="%BASE_URL%assets/table.png" alt="" />
+      <div id="food-layer" aria-label="움직이는 음식과 음료"></div>
+      <img id="hand-sprite" src="%BASE_URL%assets/hand.png" alt="손" draggable="false" />
+      <div class="hud left">
+        <div class="hud-pill">🥤 모은 오줌 <strong id="urine-count">0</strong></div>
+        <div class="hud-pill">🍷 술 <strong id="alcohol-count">0/10</strong></div>
+        <div class="hud-pill">🔥 연속 획득 <strong id="combo-count">0</strong></div>
+      </div>
+      <div class="hud right">
+        <div class="hud-pill">⏳ <strong id="feed-timer">60</strong>초</div>
+        <button id="feed-next" class="button button-small">조준하러 가기 ▶</button>
+      </div>
+      <div id="feed-notice" class="feed-notice" aria-live="polite"></div>
+      <div class="feed-instructions">화면 왼쪽이나 오른쪽, 어디든 누르면 손이 올라와 음식들을 밀어 먹여요!<br><small>60초 제한 · 음료 +10 · 간식 -30 · 음료만 3연속마다 보너스 +20</small></div>
+      <div id="fall-caption" class="fall-caption" hidden>쿠당탕!!</div>
+    </section>
+
+    <section id="shoot-screen" class="screen" hidden>
+      <canvas id="landscape-canvas" aria-hidden="true"></canvas>
+      <canvas id="stream-canvas" aria-hidden="true"></canvas>
+      <div class="hud left"><div class="hud-pill">💧 발사량 <strong id="launch-power">0</strong></div></div>
+      <div class="hud right"><div class="hud-pill">📏 비행 거리 <strong id="flight-distance">0.0</strong>m</div></div>
+      <div id="aim-ui" class="aim-ui">
+        <div class="aim-title" id="aim-title">조준 준비 중…</div>
+        <div class="aim-gauge"><div class="angle-arm" id="angle-arm"></div><div class="angle-dot"></div></div>
+        <div id="angle-number" class="angle-number">45°</div>
+        <button id="aim-button" class="button button-primary" disabled>여기를 눌러 각도 고정!</button>
+        <p id="aim-instruction">바늘이 위아래로 움직일 때 정지시키세요.</p>
+      </div>
+      <div class="flight-stamp" id="flight-stamp" hidden>발사!!</div>
+      <div id="shoot-result" class="modal-card" hidden>
+        <div class="crest">NEW RECORD?</div>
+        <h2>이번 기록 <strong id="result-meters">0.0m</strong></h2>
+        <p id="result-comment">엄청난 한 방!</p>
+        <label for="player-name">랭킹 등록 이름</label>
+        <input id="player-name" type="text" maxlength="12" value="쵸피팬" autocomplete="nickname" />
+        <div class="modal-actions">
+          <button id="record-btn" class="button button-primary">기록 저장하기</button>
+          <button id="result-rank-btn" class="button">랭킹 보기</button>
+          <button id="result-restart-btn" class="button button-ghost">다시 하기</button>
+        </div>
+        <p id="record-feedback" class="note" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section id="hidden-screen" class="screen" hidden>
+      <div class="hidden-bg"></div>
+      <img class="bed-sprite" src="%BASE_URL%assets/bed.png" alt="침대" />
+      <button id="hidden-back" class="button button-small hidden-back">↩ 타이틀로 돌아가기</button>
+    </section>
+
+    <canvas id="live2d-canvas" aria-label="Live2D 캐릭터" aria-hidden="true"></canvas>
+    <div id="fallback-char" aria-hidden="true"><div class="hair"></div><div class="ears"><i></i><i></i></div><div class="face"><div class="eyes"><i></i><i></i></div><span class="mouth">ᴗ</span></div><div class="body">✦</div></div>
+    <div id="live2d-status" class="live2d-status" hidden></div>
+
+    <div id="ranking-overlay" class="overlay" hidden>
+      <div class="ranking-panel">
+        <button id="rank-close" class="close-btn" aria-label="닫기">✕</button>
+        <div class="crest">CHOPY HALL OF FAME</div>
+        <h2>🏆 멀리 쏘기 랭킹</h2>
+        <p id="ranking-mode">랭킹 불러오는 중…</p>
+        <ol id="ranking-list"></ol>
+        <button id="rank-retry" class="button button-small">새로고침</button>
+      </div>
+    </div>
+    <div id="rotate-overlay" class="rotate-overlay" role="status" aria-live="polite">
+      <div class="rotate-message">
+        <div class="rotate-icon" aria-hidden="true">📱 ↻</div>
+        <strong>휴대폰을 가로로 돌려주세요</strong>
+        <span>쵸피 게임은 가로 화면 전용입니다.</span>
+        <small>화면을 돌리면 이어서 플레이할 수 있어요.</small>
+      </div>
+    </div>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <button id="sound-btn" class="sound-btn" aria-label="소리 켜기/끄기" title="소리 켜기/끄기">♪</button>
+  </main>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

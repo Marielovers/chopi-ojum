@@ -1,0 +1,22 @@
+{
+  "name": "chopy-distance-challenge",
+  "private": true,
+  "version": "0.1.10",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0 --port 5173 --strictPort",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "test": "node --test tests/*.test.mjs",
+    "setup:core": "node scripts/setup-core.mjs",
+    "check:models": "node scripts/check-models.mjs"
+  },
+  "dependencies": {
+    "firebase": "^11.10.0",
+    "pixi.js": "^8.15.0",
+    "@laplace.live/pixijs-live2d": "0.6.1"
+  },
+  "devDependencies": {
+    "vite": "^6.4.6"
+  }
+}

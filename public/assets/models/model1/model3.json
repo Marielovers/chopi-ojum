@@ -1,0 +1,77 @@
+{
+  "Version": 3,
+  "FileReferences": {
+    "Moc": "character.moc3",
+    "Textures": [
+      "textures/texture_00.png"
+    ],
+    "Physics": "physics3.json",
+    "DisplayInfo": "cdi3.json"
+  },
+  "Groups": [
+    {
+      "Target": "Parameter",
+      "Name": "EyeBlink",
+      "Ids": []
+    },
+    {
+      "Target": "Parameter",
+      "Name": "LipSync",
+      "Ids": []
+    }
+  ],
+  "HitAreas": [
+    {
+      "Id": "HitArea1",
+      "Name": "HitArea1"
+    },
+    {
+      "Id": "HitArea2",
+      "Name": "HitArea2"
+    },
+    {
+      "Id": "HitArea",
+      "Name": "HitArea"
+    },
+    {
+      "Id": "HitArea3",
+      "Name": "HitArea3"
+    },
+    {
+      "Id": "HitArea4",
+      "Name": "HitArea4"
+    },
+    {
+      "Id": "HitArea5",
+      "Name": "HitArea5"
+    },
+    {
+      "Id": "HitArea7",
+      "Name": "HitArea7"
+    },
+    {
+      "Id": "HitArea6",
+      "Name": "HitArea6"
+    },
+    {
+      "Id": "HitArea8",
+      "Name": "HitArea8"
+    },
+    {
+      "Id": "HitArea9",
+      "Name": "HitArea9"
+    },
+    {
+      "Id": "HitArea10",
+      "Name": "HitArea10"
+    },
+    {
+      "Id": "HitArea11",
+      "Name": "HitArea11"
+    },
+    {
+      "Id": "HitArea12",
+      "Name": "HitArea12"
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 1. 캐릭터별 통계 문서 규칙 — 기존 유지
+    match /characters/{charId} {
+      allow read: if true;
+      allow create: if request.resource.data.keys().hasOnly(['total', 'wrong'])
+                    && request.resource.data.total == 1
+                    && (request.resource.data.wrong == 0 || request.resource.data.wrong == 1);
+      allow update: if request.resource.data.diff(resource.data).affectedKeys().hasOnly(['total', 'wrong'])
+                    && request.resource.data.total == resource.data.total + 1
+                    && (request.resource.data.wrong == resource.data.wrong || request.resource.data.wrong == resource.data.wrong + 1);
+      allow delete: if false;
+    }
+
+    // 2. 엔딩 통계 문서 규칙 — 기존 유지
+    match /system/ending_stats {
+      allow read: if true;
+      allow create: if request.resource.data.keys().hasOnly(['real_count', 'fake_count'])
+                    && ((request.resource.data.real_count == 1 && request.resource.data.fake_count == 0) ||
+                        (request.resource.data.real_count == 0 && request.resource.data.fake_count == 1));
+      allow update: if request.resource.data.diff(resource.data).affectedKeys().hasAny(['real_count', 'fake_count'])
+                    && request.resource.data.keys().hasOnly(['real_count', 'fake_count'])
+                    && (
+                      (request.resource.data.real_count == resource.data.real_count + 1 && request.resource.data.fake_count == resource.data.fake_count) ||
+                      (request.resource.data.real_count == resource.data.real_count && request.resource.data.fake_count == resource.data.fake_count + 1)
+                    );
+      allow delete: if false;
+    }
+
+    match /system/h_ending_stats {
+      allow read: if true;
+      allow create: if request.resource.data.keys().hasOnly(['h_count'])
+                    && (request.resource.data.h_count == 1);
+      allow update: if request.resource.data.diff(resource.data).affectedKeys().hasAny(['h_count'])
+                    && request.resource.data.keys().hasOnly(['h_count'])
+                    && (request.resource.data.h_count == resource.data.h_count + 1);
+      allow delete: if false;
+    }
+
+    // 3. 기존 게임 랭킹 — 기존 유지
+    match /dualcore_ranking/{docId} {
+      allow read: if true;
+      allow create: if request.resource.data.keys().hasAll(['name', 'score', 'stage', 'date'])
+                    && request.resource.data.name is string
+                    && request.resource.data.score is number
+                    && request.resource.data.stage is number
+                    && request.resource.data.date is string;
+      allow update, delete: if false;
+    }
+
+    // 4. 쵸피 게임 랭킹 — 신규 추가
+    match /chopy_scores/{scoreId} {
+      allow read: if true;
+      allow create: if request.resource.data.keys().hasOnly(['name', 'meters', 'createdAt', 'version'])
+                    && request.resource.data.keys().hasAll(['name', 'meters', 'createdAt', 'version'])
+                    && request.resource.data.name is string
+                    && request.resource.data.name.size() > 0
+                    && request.resource.data.name.size() <= 12
+                    && request.resource.data.meters is number
+                    && request.resource.data.meters >= 0
+                    && request.resource.data.meters <= 10000
+                    && request.resource.data.version == 1
+                    && request.resource.data.createdAt == request.time;
+      allow update, delete: if false;
+    }
+  }
+}

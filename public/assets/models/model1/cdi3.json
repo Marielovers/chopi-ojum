@@ -1,0 +1,272 @@
+{
+	"Version": 3,
+	"Parameters": [
+		{
+			"Id": "rmhighlight",
+			"GroupId": "",
+			"Name": "눈하이라이트"
+		},
+		{
+			"Id": "eyewhite",
+			"GroupId": "",
+			"Name": "눈하얗게"
+		},
+		{
+			"Id": "lock1",
+			"GroupId": "",
+			"Name": "해금1"
+		},
+		{
+			"Id": "lock2",
+			"GroupId": "",
+			"Name": "해금2"
+		},
+		{
+			"Id": "lock3",
+			"GroupId": "",
+			"Name": "해금3"
+		},
+		{
+			"Id": "lock4",
+			"GroupId": "",
+			"Name": "해금4"
+		},
+		{
+			"Id": "lock5",
+			"GroupId": "",
+			"Name": "해금5"
+		},
+		{
+			"Id": "lock6",
+			"GroupId": "",
+			"Name": "해금6"
+		},
+		{
+			"Id": "lock7",
+			"GroupId": "",
+			"Name": "해금7"
+		},
+		{
+			"Id": "lock8",
+			"GroupId": "",
+			"Name": "해금8"
+		},
+		{
+			"Id": "power",
+			"GroupId": "",
+			"Name": "power"
+		},
+		{
+			"Id": "ParamBreath",
+			"GroupId": "",
+			"Name": "호흡"
+		},
+		{
+			"Id": "BXL",
+			"GroupId": "",
+			"Name": "BXL"
+		},
+		{
+			"Id": "BYL",
+			"GroupId": "",
+			"Name": "BYL"
+		},
+		{
+			"Id": "BXR",
+			"GroupId": "",
+			"Name": "BXR"
+		},
+		{
+			"Id": "BYR",
+			"GroupId": "",
+			"Name": "BYR"
+		},
+		{
+			"Id": "PX",
+			"GroupId": "",
+			"Name": "PX"
+		},
+		{
+			"Id": "PY",
+			"GroupId": "",
+			"Name": "PY"
+		},
+		{
+			"Id": "BX",
+			"GroupId": "",
+			"Name": "BX"
+		},
+		{
+			"Id": "BY",
+			"GroupId": "",
+			"Name": "BY"
+		},
+		{
+			"Id": "ParamAngleX",
+			"GroupId": "",
+			"Name": "각도 X"
+		},
+		{
+			"Id": "ParamAngleY",
+			"GroupId": "",
+			"Name": "각도 Y"
+		},
+		{
+			"Id": "ParamAngleZ",
+			"GroupId": "",
+			"Name": "각도 Z"
+		},
+		{
+			"Id": "ParamEyeLOpen",
+			"GroupId": "",
+			"Name": "왼쪽 눈 깜빡임"
+		},
+		{
+			"Id": "ParamEyeLSmile",
+			"GroupId": "",
+			"Name": "왼쪽 눈 미소"
+		},
+		{
+			"Id": "ParamEyeROpen",
+			"GroupId": "",
+			"Name": "오른쪽 눈 깜빡임"
+		},
+		{
+			"Id": "ParamEyeRSmile",
+			"GroupId": "",
+			"Name": "오른쪽 눈 미소"
+		},
+		{
+			"Id": "ParamEyeBallX",
+			"GroupId": "",
+			"Name": "눈 X"
+		},
+		{
+			"Id": "ParamEyeBallY",
+			"GroupId": "",
+			"Name": "눈 Y"
+		},
+		{
+			"Id": "ParamBrowLY",
+			"GroupId": "",
+			"Name": "왼쪽 눈썹 위아래로"
+		},
+		{
+			"Id": "ParamBrowRY",
+			"GroupId": "",
+			"Name": "오른쪽 눈썹 위아래로"
+		},
+		{
+			"Id": "ParamBrowLAngle",
+			"GroupId": "",
+			"Name": "왼쪽 눈썹 각도"
+		},
+		{
+			"Id": "ParamBrowRAngle",
+			"GroupId": "",
+			"Name": "오른쪽 눈썹 각도"
+		},
+		{
+			"Id": "ParamBrowLForm",
+			"GroupId": "",
+			"Name": "왼쪽 눈썹 변형"
+		},
+		{
+			"Id": "ParamBrowRForm",
+			"GroupId": "",
+			"Name": "오른쪽 눈썹 변형"
+		},
+		{
+			"Id": "ParamMouthForm",
+			"GroupId": "",
+			"Name": "입 변형"
+		},
+		{
+			"Id": "ParamMouthOpenY",
+			"GroupId": "",
+			"Name": "입 여닫기"
+		},
+		{
+			"Id": "ParamCheek",
+			"GroupId": "",
+			"Name": "수줍음"
+		},
+		{
+			"Id": "ParamBodyAngleX",
+			"GroupId": "",
+			"Name": "몸의 회전 X"
+		},
+		{
+			"Id": "ParamBodyAngleY",
+			"GroupId": "",
+			"Name": "몸의 회전 Y"
+		},
+		{
+			"Id": "ParamBodyAngleZ",
+			"GroupId": "",
+			"Name": "몸의 회전 Z"
+		},
+		{
+			"Id": "fronthairX1",
+			"GroupId": "",
+			"Name": "fronthairX1"
+		},
+		{
+			"Id": "fronthairX2",
+			"GroupId": "",
+			"Name": "fronthairX2"
+		},
+		{
+			"Id": "fronthairY",
+			"GroupId": "",
+			"Name": "fronthairY"
+		},
+		{
+			"Id": "sidehairX1",
+			"GroupId": "",
+			"Name": "sidehairX1"
+		},
+		{
+			"Id": "sidehairX2",
+			"GroupId": "",
+			"Name": "sidehairX2"
+		},
+		{
+			"Id": "sidehairY",
+			"GroupId": "",
+			"Name": "sidehairY"
+		},
+		{
+			"Id": "backhairX1",
+			"GroupId": "",
+			"Name": "backhairX1"
+		},
+		{
+			"Id": "backhairX2",
+			"GroupId": "",
+			"Name": "backhairX2"
+		},
+		{
+			"Id": "backhairY",
+			"GroupId": "",
+			"Name": "backhairY"
+		},
+		{
+			"Id": "earX1",
+			"GroupId": "",
+			"Name": "earX1"
+		},
+		{
+			"Id": "earX2",
+			"GroupId": "",
+			"Name": "earX2"
+		},
+		{
+			"Id": "earY",
+			"GroupId": "",
+			"Name": "earY"
+		}
+	],
+	"ParameterGroups": [],
+	"Parts": []
+}
